@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCB Memorizer</title>
+</head>
+<body>
+    <p id="1234"></p>
+    <p id="5678"></p>
+    <button id="randombutt" onclick="TheClick()" style="
+        width: 100px ;
+        height: 100px ;
+        background: #000;
+        color: aliceblue;
+        position: absolute;
+        margin-top: 600px;
+        margin-left: 1400px;
+        ">สุ่มข้อใหม่</button>
+    <button onclick="CheckAnswer(1)" style="
+        width: 350px ;
+        height: 120px ;
+        background: #ffffff;
+        color: rgb(0, 0, 0);
+        position: absolute;
+        margin-top: 350px;
+        margin-left: 280px;
+        position: fixed;
+        "><h1>ก.</h1><img id="ans1Check" hidden="hidden" src="{{ url_for('static', filename='Wrong.png') }}" style="width: 80px;height: 80px;margin-left: 250px;margin-bottom: 600px;"></button><iframe src="" frameborder="0" id="ans1" style="height: 50px;width: auto;position: fixed;margin-left:280px;margin-top:350px;"></iframe>
+    <button onclick="CheckAnswer(2)" style="
+        width: 350px ;
+        height: 120px ;
+        background: #ffffff;
+        color: rgb(0, 0, 0);
+        position: absolute;
+        margin-top: 350px;
+        margin-left: 880px;
+        position: fixed;
+        "><h1>ข.</h1><img id="ans2Check" hidden="hidden" src="{{ url_for('static', filename='Wrong.png') }}" style="width: 80px;height: 80px;margin-left: 250px;margin-bottom: 600px;"></button><iframe src="" frameborder="0" id="ans2" style="height: 50px;width: auto;position: fixed;margin-left:880px;margin-top:350px;"></iframe>
+    <button onclick="CheckAnswer(3)" style="
+        width: 350px ;
+        height: 120px ;
+        background: #ffffff;
+        color: rgb(0, 0, 0);
+        position: absolute;
+        margin-top: 550px;
+        margin-left: 280px;
+        position: fixed;
+        "><h1>ค.</h1><img id="ans3Check" hidden="hidden" src="{{ url_for('static', filename='Wrong.png') }}" style="width: 80px;height: 80px;margin-left: 250px;margin-bottom: 600px;"></button><iframe src="" frameborder="0" id="ans3" style="height: 50px;width: auto;position: fixed;margin-left:280px;margin-top:550px;"></iframe>
+    <button onclick="CheckAnswer(4)" style="
+        width: 350px ;
+        height: 120px ;
+        background: #ffffff;
+        color: rgb(0, 0, 0);
+        position: absolute;
+        margin-top: 550px;
+        margin-left: 880px;
+        position: fixed;
+        "><h1>ง</h1>.<img id="ans4Check" hidden="hidden" src="{{ url_for('static', filename='Wrong.png') }}" style="width: 80px;height: 80px;margin-left: 250px;margin-bottom: 600px;"></button><iframe src="" frameborder="0" id="ans4" style="height: 50px;width: auto;position: fixed;margin-left:880px;margin-top:550px;"></iframe>
+    <button id="PBTID" onclick="InQuestion('P')" style="
+        width: 80px ;
+        height: 80px ;
+        background: #ff0000;
+        color: rgb(255, 255, 255);
+        position: absolute;
+        margin-top: 0px;
+        margin-left: 1200px;
+        ">Physics <img id="PCorrect" src="{{ url_for('static', filename='Correct.png') }}" style="width: 80px;height: 80px;"></button>
+    <button id="CBTID" onclick="InQuestion('C')" style="
+        width: 80px ;
+        height: 80px ;
+        background: #c800ff;
+        color: rgb(255, 255, 255);
+        position: absolute;
+        margin-top: 0px;
+        margin-left: 1300px;
+        ">Chemical <img id="CCorrect" src="{{ url_for('static', filename='Correct.png') }}" style="width: 80px;height: 80px;"></button>
+    <button id="BBTID" onclick="InQuestion('B')" style="
+        width: 80px ;
+        height: 80px ;
+        background: #00ff59;
+        color: rgb(255, 255, 255);
+        position: absolute;
+        margin-top: 0px;
+        margin-left: 1400px;
+        ">Biology <img id="BCorrect" src="{{ url_for('static', filename='Correct.png') }}" style="width: 80px;height: 80px;"></button>
+    <center><img id="Picture" style="width : 450px;height: auto;"></center>
+    <script>
+        let finish = true
+        const thefliecount = {
+            B:"{{ fileB }}",
+            P:"{{ fileP }}",
+            C:"{{ fileC }}"
+        }
+        let thecorrectanswer = 0
+        let QuestionDesire = {
+            P:true,
+            C:true,
+            B:true
+        }
+        let randomanswer = ""
+        function TheClick() {
+            let counttrue = 0
+            let inrandom = []
+            for (const key in QuestionDesire) {
+                const element = QuestionDesire[key];
+                if (element == true){
+                    counttrue += 1
+                    inrandom.push(key)
+                }
+            }
+            thecorrectanswer = Math.round(Math.random()*4)
+            if (thecorrectanswer<1){
+                thecorrectanswer = 1
+            }
+            if (document.getElementById("randombutt").innerHTML == 'สุ่มข้อใหม่' && counttrue>0){
+                document.getElementById("randombutt").innerHTML = 'ลบ'
+                finish = false
+                let theallofanswerinSubject = []
+                let randomSubject = Math.floor(Math.random()*inrandom.length)
+                if (randomSubject>2){
+                    randomSubject = 2
+                }
+                for (let i = 0; i < thefliecount[inrandom[randomSubject]]; i++) {
+                    theallofanswerinSubject.push(i)
+                }
+                let choicetochoose = [1,2,3,4]
+                let a = Math.floor(Math.random()*thefliecount[inrandom[randomSubject]])
+                if (a>thefliecount[inrandom[randomSubject]]-1){
+                    a=thefliecount[inrandom[randomSubject]]-1
+                }
+                theallofanswerinSubject.splice(a,1)
+                document.getElementById("Picture").src = '/static/'+inrandom[randomSubject]+"Quest"+"/"+String(a)+".png"
+                document.getElementById("ans"+thecorrectanswer).src = '/static/'+inrandom[randomSubject]+"Quest"+'/Answer/'+String(a)+'.txt'
+                choicetochoose.splice(thecorrectanswer-1,1)
+                let ihuakuay = 999
+                for (const key in choicetochoose) {
+                    const element = choicetochoose[key];
+                    const radnomfakeanswer = Math.round(Math.random()*(theallofanswerinSubject.length-1))
+                    document.getElementById("ans"+element).src = '/static/'+inrandom[randomSubject]+"Quest"+'/Answer/'+theallofanswerinSubject[radnomfakeanswer]+'.txt'
+                    theallofanswerinSubject.splice(radnomfakeanswer,1)
+                }
+            }
+            else {
+                finish = true
+                document.getElementById("ans1Check").setAttribute("hidden","hidden")
+                document.getElementById("ans2Check").setAttribute("hidden","hidden")
+                document.getElementById("ans3Check").setAttribute("hidden","hidden")
+                document.getElementById("ans4Check").setAttribute("hidden","hidden")
+                document.getElementById("randombutt").innerHTML = "สุ่มข้อใหม่"
+                document.getElementById("Picture").setAttribute("src","")
+                const tableforresetanswerchooser = [1,2,3,4]
+                for (const key in tableforresetanswerchooser) {
+                    const element = tableforresetanswerchooser[key]
+                    document.getElementById("ans"+element).src = ""
+                }
+            }
+        }hidden="hidden" 
+        function CheckAnswer(Answer) {
+            if (finish == false) {
+            if (thecorrectanswer != 0 && Answer == thecorrectanswer){
+                document.getElementById("ans"+thecorrectanswer+"Check").src = "static/Correct.png"
+                document.getElementById("ans"+thecorrectanswer+"Check").removeAttribute("hidden")
+                finish = true
+            }
+            else {
+                document.getElementById("ans"+Answer+"Check").src = "static/Wrong.png"
+                document.getElementById("ans"+Answer+"Check").removeAttribute("hidden")
+                document.getElementById("ans"+thecorrectanswer+"Check").src = "static/Correct.png"
+                document.getElementById("ans"+thecorrectanswer+"Check").removeAttribute("hidden")
+                finish = true
+            }
+        }
+        }
+        function InQuestion(TheID){
+            //document.getElementById("1234").innerHTML = document.getElementById(TheID.concat("Correct")).getAttribute("hidden")
+            if (document.getElementById(TheID.concat("Correct")).checkVisibility() == true){
+                document.getElementById(TheID.concat("Correct")).setAttribute("hidden","hidden")
+                QuestionDesire[TheID] = false;
+            }
+            else {
+                document.getElementById(TheID.concat("Correct")).removeAttribute("hidden")
+                QuestionDesire[TheID] = true;
+            }
+        }
+    </script>
+</body>
+</html>
