@@ -18,4 +18,5 @@ def index():
     return render_template('index.html', fileP=fileP_count, fileB=fileB_count, fileC=fileC_count)
 
 if __name__ == '__main__':
-    app.run(debug=True,use_reloader=True)
+
+    app.run(debug=True)
