@@ -1,4 +1,4 @@
-from flask import Flask,render_template
+from flask import Flask,render_template,jsonify
 import os
 
 app = Flask(__name__)
@@ -17,6 +17,14 @@ def index():
 
     return render_template('index.html', fileP=fileP_count, fileB=fileB_count, fileC=fileC_count)
 
+@app.errorhandler(500)
+def internal_error(error):
+    return jsonify({
+        "message": "Internal Server Error",
+        "error": str(error)
+    }), 500
+
 if __name__ == '__main__':
 
     app.run(debug=True)
+
